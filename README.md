@@ -9,20 +9,14 @@ the proper way:
 3. Import the database (only do this once or if you wanna reset the db):
    - Create a new MySQL database (replace `your_mysql_username` as needed):
      ```sh
-     mysql -u root -p -e "CREATE DATABASE inventory_db;"
+     mysql -u root -e "CREATE DATABASE inventory_db;"
      ```
    - Import the schema and sample data (run from the project root):
      ```sh
-     mysql -u root -p inventory_db < database/schema.sql
+     mysql -u root inventory_db < database/schema.sql
      ```
 4. Update `config.php` with your MySQL credentials.
 5. Go to http://localhost:8080/Inventory-Management-System/login.php
-
-lazy way (if apache isnt working):
-
-1. php -S localhost:8080
-2. go to http://localhost:8080/Inventory-Management-System/login.php
-   \*\* if port 8080 is already in use, change the port in both commands to a different port
 
 ## Next Steps
 
