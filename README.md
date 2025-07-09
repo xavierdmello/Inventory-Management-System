@@ -15,8 +15,7 @@ the proper way:
      ```sh
      mysql -u root inventory_db < database/schema.sql
      ```
-4. Update `config.php` with your MySQL credentials.
-5. Go to http://localhost:8080/Inventory-Management-System/login.php
+4. Go to http://localhost:8080/Inventory-Management-System/login.php
 
 ## Next Steps
 
