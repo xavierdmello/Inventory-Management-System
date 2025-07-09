@@ -4,7 +4,7 @@ $host = 'localhost';
 $db   = 'inventory_db';
 $user = 'root';
 $pass = '';     
-// change user and pass if needed 
+// user and pass should be root and blank by default for mysql
 
 // Create a new PDO instance
 try {

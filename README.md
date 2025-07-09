@@ -2,15 +2,27 @@
 
 ## Getting Started
 
-1. **Install Apache, PHP, and MySQL** (no XAMPP, phpMyAdmin, or similar tools allowed).
-2. Place the project files in your Apache web root (e.g., `htdocs` or `www`).
-3. Import the database:
-   - Create a new MySQL database (e.g., `inventory_db`).
-   - Run the SQL in `database/schema.sql` to create tables and insert sample data.
-4. Update `config.php` with your MySQL credentials.
-5. Access the app in your browser (e.g., `http://localhost/inventory-management-system/login.php`).
+the proper way:
 
-```
+1. **Install Apache, PHP, and MySQL** (no XAMPP, phpMyAdmin, or similar tools allowed).
+2. Place the project files in your Apache web root (google/ask gpt how to do this). U can clone this repo to that dir and just keep working on it from there.
+3. Import the database (only do this once or if you wanna reset the db):
+   - Create a new MySQL database (replace `your_mysql_username` as needed):
+     ```sh
+     mysql -u root -p -e "CREATE DATABASE inventory_db;"
+     ```
+   - Import the schema and sample data (run from the project root):
+     ```sh
+     mysql -u root -p inventory_db < database/schema.sql
+     ```
+4. Update `config.php` with your MySQL credentials.
+5. Go to http://localhost:8080/Inventory-Management-System/login.php
+
+lazy way (if apache isnt working):
+
+1. php -S localhost:8080
+2. go to http://localhost:8080/Inventory-Management-System/login.php
+   \*\* if port 8080 is already in use, change the port in both commands to a different port
 
 ## Next Steps
 
@@ -18,5 +30,7 @@
 - Add update and delete functionality
 - Add search functionality
 - Improve UI/UX
+
+```
 
 ```
