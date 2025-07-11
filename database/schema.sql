@@ -7,6 +7,7 @@ CREATE TABLE IF NOT EXISTS SupplierTable (
     Email VARCHAR(100)
 );
 
+/*
 INSERT INTO SupplierTable (SupplierID, SupplierName, Address, Phone, Email) VALUES
 (9512, 'Acme Corporation', '123 Main St', '205-288-8591', 'info@acme-corp.com'),
 (8642, 'Xerox Inc.', '456 High St', '505-398-8414', 'info@xrx.com'),
@@ -28,6 +29,7 @@ INSERT INTO SupplierTable (SupplierID, SupplierName, Address, Phone, Email) VALU
 (7807, 'Intel', '2200 Mission College Blvd', '408-646-7611', 'support@intel.com'),
 (8672, 'AMD', '246 Santa Clara St', '312-866-2043', 'support@amd.com'),
 (4567, 'Qualcomm', '456 San Diego St', '44-7700-087231', 'info@qualcomm.co.uk');
+*/
 
 -- Create ProductTable
 CREATE TABLE IF NOT EXISTS ProductTable (
@@ -41,6 +43,7 @@ CREATE TABLE IF NOT EXISTS ProductTable (
     PRIMARY KEY (ProductID, Description, SupplierID)
 );
 
+/*
 INSERT INTO ProductTable (ProductID, ProductName, Description, Price, Quantity, Status, SupplierID) VALUES
 (2591, 'Camera', 'Camera', 799.9, 50, 'B', 7890),
 (3374, 'Laptop', 'MacBook Pro', 1799.9, 30, 'A', 9876),
@@ -62,6 +65,7 @@ INSERT INTO ProductTable (ProductID, ProductName, Description, Price, Quantity, 
 (1516, 'Mouse', 'Wireless Mouse', 69.5, 20, 'A', 7807),
 (1234, 'TV', 'Plate TV', 599.3, 5, 'B', 8672),
 (3374, 'Laptop', 'Laptop', 1369.9, 15, 'A', 4567);
+*/
 
 -- Create InventoryTable
 CREATE TABLE IF NOT EXISTS InventoryTable (
@@ -74,6 +78,7 @@ CREATE TABLE IF NOT EXISTS InventoryTable (
     -- No primary key, as this is a denormalized view for display
 );
 
+/*
 -- Sample data for InventoryTable (should be constructed from ProductTable and SupplierTable in real use)
 INSERT INTO InventoryTable (ProductID, ProductName, Quantity, Price, Status, SupplierName) VALUES
 (2591, 'Camera', 50, 799.9, 'B', 'Samsung'),
@@ -95,4 +100,17 @@ INSERT INTO InventoryTable (ProductID, ProductName, Quantity, Price, Status, Sup
 (1516, 'Mouse', 50, 49.4, 'B', 'Amazon'),
 (1516, 'Mouse', 20, 69.5, 'A', 'Intel'),
 (1234, 'TV', 5, 599.3, 'B', 'AMD'),
-(3374, 'Laptop', 15, 1369.9, 'A', 'Qualcomm'); 
+(3374, 'Laptop', 15, 1369.9, 'A', 'Qualcomm');
+*/
+
+-- Create Users table
+CREATE TABLE IF NOT EXISTS Users (
+    UserID INT NOT NULL AUTO_INCREMENT PRIMARY KEY, -- Clustered Index
+    Username VARCHAR(100) NOT NULL UNIQUE,
+    Password VARCHAR(60) NOT NULL,
+    Email VARCHAR(100) NOT NULL UNIQUE,
+    CreatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+INSERT INTO Users (Username, Password, Email) VALUES
+('AriaHK', '123', 'ariahk@butei.com');
