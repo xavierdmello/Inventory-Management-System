@@ -31,25 +31,36 @@ if (!isset($_SESSION['username'])) {
 }
 
 // If we're here, user is logged in, so show inventory
-// Delete Request
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_id'])) {
-    $deleteId = $_POST['delete_id'];
-    $stmt = $pdo->prepare('DELETE FROM InventoryTable WHERE ProductID = ?');
-    $stmt->execute([$deleteId]);
-}
-
 // Update Request
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_id'])) {
-    $updateId = $_POST['update_id'];
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_row'])) {
+    $product_id = $_POST['product_id'];
+    $supplier_name = $_POST['supplier_name'];
+    $price = $_POST['price'];
     $newQuantity = $_POST['new_quantity'];
     $newStatus = $_POST['new_status'];
 
-    $stmt = $pdo->prepare('UPDATE InventoryTable SET Quantity = ?, Status = ? WHERE ProductID = ?');
-    $stmt->execute([$newQuantity, $newStatus, $updateId]);
+    $stmt = $pdo->prepare('UPDATE InventoryTable SET Quantity = ?, Status = ? WHERE ProductID = ? AND SupplierName = ? AND Price = ?');
+    $stmt->execute([$newQuantity, $newStatus, $product_id, $supplier_name, $price]);
 }
 
-$stmt = $pdo->prepare('SELECT ProductID, ProductName, Quantity, Price, Status, SupplierName FROM InventoryTable ORDER BY ProductID ASC');
-$stmt->execute();
+// Delete Request
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_row'])) {
+    $product_id = $_POST['product_id'];
+    $supplier_name = $_POST['supplier_name'];
+    $price = $_POST['price'];
+
+    $stmt = $pdo->prepare('DELETE FROM InventoryTable WHERE ProductID = ? AND SupplierName = ? AND Price = ?');
+    $stmt->execute([$product_id, $supplier_name, $price]);
+}
+
+$search = $_GET['search'] ?? '';
+if ($search !== '') {
+    $stmt = $pdo->prepare('SELECT ProductID, ProductName, Quantity, Price, Status, SupplierName FROM InventoryTable WHERE ProductName LIKE ? ORDER BY ProductID ASC');
+    $stmt->execute(["%$search%"]);
+} else {
+    $stmt = $pdo->prepare('SELECT ProductID, ProductName, Quantity, Price, Status, SupplierName FROM InventoryTable ORDER BY ProductID ASC');
+    $stmt->execute();
+}
 $inventory = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
 <!DOCTYPE html>
@@ -66,6 +77,10 @@ $inventory = $stmt->fetchAll(PDO::FETCH_ASSOC);
     </form>
 
     <h2>Inventory Table</h2>
+    <form method="get" action="inventory.php" style="margin-bottom: 10px;">
+        <input type="text" name="search" placeholder="Search by Product Name" value="<?php echo isset($_GET['search']) ? htmlspecialchars($_GET['search']) : '' ?>">
+        <button type="submit">Search</button>
+    </form>
     <table border="1" cellpadding="5" cellspacing="0">
         <tr>
             <th>Product ID</th>
@@ -77,28 +92,34 @@ $inventory = $stmt->fetchAll(PDO::FETCH_ASSOC);
         </tr>
         <?php foreach ($inventory as $row): ?>
         <tr>
-            <form method="post" action="inventory.php">
-                <td><?php echo htmlspecialchars($row['ProductID']); ?></td>
-                <td><?php echo htmlspecialchars($row['ProductName']); ?></td>
-                <td>
-                    <input type="number" name="new_quantity" value="<?php echo htmlspecialchars($row['Quantity']); ?>" required>
-                </td>
-                <td><?php echo htmlspecialchars($row['Price']); ?></td>
-                <td>
-                    <input type="text" name="new_status" value="<?php echo htmlspecialchars($row['Status']); ?>" required>
-                </td>
-                <td><?php echo htmlspecialchars($row['SupplierName']); ?></td>
-                <td>
-                    <input type="hidden" name="update_id" value="<?php echo $row['ProductID']; ?>">
-                    <button type="submit">Update</button>
-                </td>
-            </form>
-            <form method="post" action="inventory.php" onsubmit="return confirm('Are you sure you want to delete this item?');">
-                <td>
-                    <input type="hidden" name="delete_id" value="<?php echo $row['ProductID']; ?>">
-                    <button type="submit">Delete</button>
-                </td>
-            </form>
+        <form method="post" action="inventory.php">
+            <td><?php echo htmlspecialchars($row['ProductID']); ?></td>
+            <td><?php echo htmlspecialchars($row['ProductName']); ?></td>
+            <td>
+                <input type="number" name="new_quantity" value="<?php echo htmlspecialchars($row['Quantity']); ?>" required>
+            </td>
+            <td><?php echo htmlspecialchars($row['Price']); ?></td>
+            <td>
+                <input type="text" name="new_status" value="<?php echo htmlspecialchars($row['Status']); ?>" required>
+            </td>
+            <td><?php echo htmlspecialchars($row['SupplierName']); ?></td>
+            <td>
+                <!-- Hidden fields for unique identification -->
+                <input type="hidden" name="product_id" value="<?php echo $row['ProductID']; ?>">
+                <input type="hidden" name="supplier_name" value="<?php echo htmlspecialchars($row['SupplierName']); ?>">
+                <input type="hidden" name="price" value="<?php echo $row['Price']; ?>">
+                <button type="submit" name="update_row" value="1">Update</button>
+            </td>
+        </form>
+        <form method="post" action="inventory.php" onsubmit="return confirm('Are you sure you want to delete this item?');">
+            <td>
+                <input type="hidden" name="product_id" value="<?php echo $row['ProductID']; ?>">
+                <input type="hidden" name="supplier_name" value="<?php echo htmlspecialchars($row['SupplierName']); ?>">
+                <input type="hidden" name="price" value="<?php echo $row['Price']; ?>">
+                <button type="submit" name="delete_row" value="1">Delete</button>
+            </td>
+        </form>
+
         </tr>
         <?php endforeach; ?>
 
