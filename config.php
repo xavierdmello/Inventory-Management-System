@@ -3,7 +3,7 @@
 $host = 'localhost';
 $db   = 'inventory_db';
 $user = 'root';
-$pass = 'XXX'; // Change according to your password     
+$pass = ''; // Change according to your password     
 // user and pass should be root and blank by default for mysql
 
 // Create a new PDO instance
