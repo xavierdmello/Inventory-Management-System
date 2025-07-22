@@ -16,14 +16,3 @@ the proper way:
      mysql -u root inventory_db < database/schema.sql
      ```
 4. Go to http://localhost:8080/Inventory-Management-System/login.php
-
-## Next Steps
-
-- Implement real authentication
-- Add update and delete functionality
-- Add search functionality
-- Improve UI/UX
-
-```
-
-```
